@@ -28293,14 +28293,47 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function App() {
   return /*#__PURE__*/_react.default.createElement("div", {
-    className: "bg-black text-red-600"
-  }, "Salut");
+    className: "min-h-screen bg-gray-300 text-gray-900 font-sans flex justify-center items-center flex-col"
+  }, /*#__PURE__*/_react.default.createElement("h1", {
+    className: "text-4xl font-bold mb-8"
+  }, "Bienvenue sur ", /*#__PURE__*/_react.default.createElement("span", {
+    className: "text-purple-600"
+  }, "Time's OP !")), /*#__PURE__*/_react.default.createElement("form", {
+    className: "flex justify-center items-center flex-col"
+  }, /*#__PURE__*/_react.default.createElement("legend", {
+    className: "text-lg mb-5"
+  }, "Tout d'abord, choisissez le nom des \xE9quipes qui vont s'affronter :"), /*#__PURE__*/_react.default.createElement("label", {
+    className: "flex flex-col w-full items-start mb-4",
+    htmlFor: "equipe1"
+  }, /*#__PURE__*/_react.default.createElement("span", {
+    className: "mb-4"
+  }, "\xC9quipe 1 :"), /*#__PURE__*/_react.default.createElement("input", {
+    className: "shadow-sm w-full h-12 box-border p-4 rounded-lg",
+    type: "text",
+    name: "equipe1",
+    id: "equipe1"
+  })), /*#__PURE__*/_react.default.createElement("label", {
+    className: "flex flex-col w-full items-start",
+    htmlFor: "equipe2"
+  }, /*#__PURE__*/_react.default.createElement("span", {
+    className: "mb-4"
+  }, "\xC9quipe 1 :"), /*#__PURE__*/_react.default.createElement("input", {
+    className: "shadow-sm w-full h-12 box-border p-4 rounded-lg",
+    type: "text",
+    name: "equipe2",
+    id: "equipe2"
+  })), /*#__PURE__*/_react.default.createElement("button", {
+    className: "transition-all duration-200 text-white text-lg bg-purple-600 hover:bg-purple-700 p-10 pt-3 pb-3 rounded-lg mt-8",
+    type: "submit"
+  }, "Jouer !")));
 }
 
 var _default = App;
@@ -28345,7 +28378,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59518" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60057" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
