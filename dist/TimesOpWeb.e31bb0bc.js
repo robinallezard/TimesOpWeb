@@ -28311,13 +28311,29 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var initialState = {}; // toutes les célébrités + un objet avec le nom de l'équipe + les points à chaque manche.
+var initialState = {
+  equipes: [{
+    id: 'equipe1',
+    nom: '',
+    points: {
+      manche1: null,
+      manche2: null,
+      manche3: null
+    }
+  }, {
+    id: 'equipe2',
+    nom: '',
+    points: {
+      manche1: null,
+      manche2: null,
+      manche3: null
+    }
+  }]
+}; // toutes les célébrités + un objet avec le nom de l'équipe + les points à chaque manche.
 
 var store = (0, _react.createContext)(initialState);
 exports.store = store;
 var Provider = store.Provider; // permet de transmettre au children les données
-
-console.log(store);
 
 var StateProvider = function StateProvider(_ref) {
   var children = _ref.children;
@@ -32251,19 +32267,82 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _store = require("../store.js");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function Home() {
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "min-h-screen bg-gray-300 text-gray-900 font-sans flex justify-center items-center flex-col"
-  }, /*#__PURE__*/_react.default.createElement("h1", {
+  var globalState = (0, _react.useContext)(_store.store);
+  var state = globalState.state,
+      dispatch = globalState.dispatch;
+
+  var _useState = (0, _react.useState)(state.equipes),
+      _useState2 = _slicedToArray(_useState, 2),
+      dataTeam = _useState2[0],
+      setDataTeam = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(null),
+      _useState4 = _slicedToArray(_useState3, 2),
+      error = _useState4[0],
+      setError = _useState4[1];
+
+  var handleChange = function handleChange(e) {
+    var _e$target = e.target,
+        value = _e$target.value,
+        name = _e$target.name;
+    var newDataTeam = dataTeam.map(function (equipe) {
+      return equipe.id === name ? _objectSpread(_objectSpread({}, equipe), {}, {
+        nom: value
+      }) : equipe;
+    });
+    setDataTeam(newDataTeam);
+  };
+
+  var handleSubmit = function handleSubmit(e) {
+    e.preventDefault();
+
+    if (dataTeam !== null) {
+      var validData = dataTeam.filter(function (equipe) {
+        return equipe.nom !== '';
+      });
+      console.log(validData);
+      validData.length === dataTeam.length ? setError(null) : setError('veuillez remplir tous les champs');
+    } else {
+      setError('veuillez remplir tous les champs');
+    }
+  };
+
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h1", {
     className: "text-4xl font-bold mb-8"
   }, "Bienvenue sur ", /*#__PURE__*/_react.default.createElement("span", {
     className: "text-purple-600"
   }, "Time's OP !")), /*#__PURE__*/_react.default.createElement("form", {
-    className: "flex justify-center items-center flex-col"
+    className: "flex justify-center items-center flex-col",
+    onSubmit: function onSubmit() {
+      return handleSubmit(event);
+    }
   }, /*#__PURE__*/_react.default.createElement("legend", {
     className: "text-lg mb-5"
   }, "Tout d'abord, choisissez le nom des \xE9quipes qui vont s'affronter :"), /*#__PURE__*/_react.default.createElement("label", {
@@ -32273,6 +32352,9 @@ function Home() {
     className: "mb-4"
   }, "\xC9quipe 1 :"), /*#__PURE__*/_react.default.createElement("input", {
     className: "shadow-sm w-full h-12 box-border p-4 rounded-lg",
+    onChange: function onChange() {
+      return handleChange(event);
+    },
     type: "text",
     name: "equipe1",
     id: "equipe1"
@@ -32281,12 +32363,17 @@ function Home() {
     htmlFor: "equipe2"
   }, /*#__PURE__*/_react.default.createElement("span", {
     className: "mb-4"
-  }, "\xC9quipe 1 :"), /*#__PURE__*/_react.default.createElement("input", {
+  }, "\xC9quipe 2 :"), /*#__PURE__*/_react.default.createElement("input", {
     className: "shadow-sm w-full h-12 box-border p-4 rounded-lg",
+    onChange: function onChange() {
+      return handleChange(event);
+    },
     type: "text",
     name: "equipe2",
     id: "equipe2"
-  })), /*#__PURE__*/_react.default.createElement("button", {
+  })), error ? /*#__PURE__*/_react.default.createElement("div", {
+    className: "bg-red-500 p-4 text-white rounded-lg box-border w-full mt-4"
+  }, error) : null, /*#__PURE__*/_react.default.createElement("button", {
     className: "transition-all duration-200 text-white text-lg bg-purple-600 hover:bg-purple-700 p-10 pt-3 pb-3 rounded-lg mt-8",
     type: "submit"
   }, "Jouer !")));
@@ -32294,7 +32381,7 @@ function Home() {
 
 var _default = Home;
 exports.default = _default;
-},{"react":"node_modules/react/index.js"}],"src/Components/Jeu.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","../store.js":"src/store.js"}],"src/Components/Jeu.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32358,7 +32445,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function App() {
   return /*#__PURE__*/_react.default.createElement(_store.StateProvider, null, /*#__PURE__*/_react.default.createElement("div", {
-    className: "min-h-screen bg-gray-300 text-gray-900 font-sans flex justify-center items-center flex-col"
+    className: "min-h-screen bg-gray-300 text-gray-900 font-sans flex justify-center items-center flex-col p-5 border-box"
   }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Switch, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
     path: "/"
   }, /*#__PURE__*/_react.default.createElement(_Home.default, null)), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
@@ -32410,7 +32497,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61086" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59340" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

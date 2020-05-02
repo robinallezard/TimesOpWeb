@@ -8,7 +8,7 @@ import Recap from './Components/Recap.js';
 function App() {
     return (
         <StateProvider>
-        <div className="min-h-screen bg-gray-300 text-gray-900 font-sans flex justify-center items-center flex-col">
+        <div className="min-h-screen bg-gray-300 text-gray-900 font-sans flex justify-center items-center flex-col p-5 border-box">
         <Router>
             <Switch>
                 <Route path="/">
