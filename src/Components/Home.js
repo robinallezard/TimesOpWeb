@@ -2,7 +2,7 @@ import React, {useState, useContext} from 'react'
 import { store } from '../store.js';
 import { useHistory } from "react-router-dom";
 
-function Home({props}) {
+function Home() {
     const globalState = useContext(store);
     const { state, dispatch } = globalState;
     const [dataTeam, setDataTeam] = useState(state.equipes);

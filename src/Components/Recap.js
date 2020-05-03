@@ -4,15 +4,15 @@ import { useHistory } from "react-router-dom";
 
 function Recap() {
     const globalState = useContext(store);
-
     const { state, dispatch } = globalState;
-    console.log(state);
+    let history = useHistory();
     
     const [teamsInfo, setTeamsInfo] = useState(state.equipes)
 
 
     function handleClick() {
         dispatch({type : 'ADD_WORDS'});
+        history.push('/jeu');
     }
 
     return (

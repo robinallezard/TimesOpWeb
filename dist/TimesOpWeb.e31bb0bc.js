@@ -28329,7 +28329,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var initialState = {
-  words: [],
+  words: ['test', 'test5461'],
   equipes: [{
     id: 'equipe1',
     nom: 'Equipe 1',
@@ -28360,7 +28360,6 @@ function chooseWords(ar, l) {
 
   for (var i = 0; i < l; i++) {
     arrayWords[i] = ar[Math.floor(Math.random() * ar.length)];
-    console.log(arrayWords[i]);
   }
 
   return arrayWords;
@@ -32336,8 +32335,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function Home(_ref) {
-  var props = _ref.props;
+function Home() {
   var globalState = (0, _react.useContext)(_store.store);
   var state = globalState.state,
       dispatch = globalState.dispatch;
@@ -32444,17 +32442,94 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _store = require("../store.js");
+
+var _reactRouterDom = require("react-router-dom");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function Jeu() {
-  return /*#__PURE__*/_react.default.createElement("div", null, "fevefv");
+  var globalState = (0, _react.useContext)(_store.store);
+  var state = globalState.state,
+      dispatch = globalState.dispatch;
+
+  var _useState = (0, _react.useState)(30),
+      _useState2 = _slicedToArray(_useState, 2),
+      seconds = _useState2[0],
+      setSeconds = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(state.words),
+      _useState4 = _slicedToArray(_useState3, 2),
+      mots = _useState4[0],
+      setMots = _useState4[1];
+
+  var history = (0, _reactRouterDom.useHistory)();
+  (0, _react.useEffect)(function () {
+    var interval = null;
+
+    if (seconds > 0) {
+      interval = setInterval(function () {
+        setSeconds(seconds - 1);
+      }, 1000);
+    } else {
+      history.push('/recap');
+    }
+
+    return function () {
+      return clearInterval(interval);
+    };
+  });
+
+  function updateTable() {
+    if (mots.length > 1) {
+      setMots(mots.filter(function (item, index) {
+        return index !== 0;
+      }));
+    } else {
+      history.push('/recap');
+    }
+  }
+
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h1", {
+    className: "text-4xl font-bold mb-5"
+  }, "Il reste ", /*#__PURE__*/_react.default.createElement("span", {
+    className: "text-purple-500"
+  }, seconds), " secondes"), /*#__PURE__*/_react.default.createElement("strong", {
+    className: "text-6xl font-bold mb-10"
+  }, mots[0]), /*#__PURE__*/_react.default.createElement("div", {
+    className: "flex mt-5"
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    onClick: function onClick() {
+      return updateTable();
+    },
+    className: "text-white  text-2xl bg-green-600 hover:bg-green-800 px-6 py-3 rounded-lg mr-10"
+  }, "Trouv\xE9 !"), /*#__PURE__*/_react.default.createElement("button", {
+    onClick: function onClick() {
+      return setSeconds(seconds - 3);
+    },
+    className: "text-white text-2xl bg-red-600 hover:bg-red-800 px-6 py-3 rounded-lg"
+  }, "Je passe")));
 }
 
 var _default = Jeu;
 exports.default = _default;
-},{"react":"node_modules/react/index.js"}],"src/Components/Recap.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","../store.js":"src/store.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js"}],"src/Components/Recap.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32490,7 +32565,7 @@ function Recap() {
   var globalState = (0, _react.useContext)(_store.store);
   var state = globalState.state,
       dispatch = globalState.dispatch;
-  console.log(state);
+  var history = (0, _reactRouterDom.useHistory)();
 
   var _useState = (0, _react.useState)(state.equipes),
       _useState2 = _slicedToArray(_useState, 2),
@@ -32501,6 +32576,7 @@ function Recap() {
     dispatch({
       type: 'ADD_WORDS'
     });
+    history.push('/jeu');
   }
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h1", {

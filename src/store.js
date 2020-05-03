@@ -2,7 +2,7 @@ import React, { useReducer, createContext } from 'react';
 import {words} from './words';
 
 const initialState = {
-    words : [],
+    words : ['test', 'test5461'],
     equipes : [
         {
             id: 'equipe1',
@@ -38,7 +38,6 @@ function chooseWords(ar, l) {
 
     for( let i = 0; i < l; i++) {
         arrayWords[i] = ar[Math.floor(Math.random()*ar.length)];
-        console.log(arrayWords[i]);
     }
     return arrayWords;
 }
