@@ -31,10 +31,15 @@ const { Provider } = store; // permet de transmettre au children les données
 
 const StateProvider = ({children}) => {
     const [state, dispatch] = useReducer((state, action) => {
+
+        const {type, payload} = action;
+
         switch(action.type) {
             case 'ADD_TEAMS_NAME' :
-                console.log('test');
-                return state;
+                return {
+                    ...state,
+                    equipes: payload
+                };
             default:
                 console.log('rien');
                 return state;

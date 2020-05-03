@@ -11,14 +11,14 @@ function App() {
         <div className="min-h-screen bg-gray-300 text-gray-900 font-sans flex justify-center items-center flex-col p-5 border-box">
         <Router>
             <Switch>
-                <Route path="/">
-                    <Home/>
-                </Route>
                 <Route path="/jeu">
                     <Jeu/>
                 </Route>
                 <Route path="/recap">
                     <Recap/>
+                </Route>
+                <Route path="/">
+                    <Home/>
                 </Route>
             </Switch>
         </Router>

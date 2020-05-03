@@ -1,12 +1,13 @@
 import React, {useState, useContext} from 'react'
 import { store } from '../store.js';
+import { useHistory } from "react-router-dom";
 
-function Home() {
+function Home({props}) {
     const globalState = useContext(store);
-    
     const { state, dispatch } = globalState;
-
     const [dataTeam, setDataTeam] = useState(state.equipes);
+    let history = useHistory();
+
     
     const [error, setError] = useState(null);
     
@@ -26,9 +27,14 @@ function Home() {
         if(dataTeam !== null) {
             const validData = dataTeam.filter(equipe => equipe.nom !== '');
 
-            console.log(validData);
-            
-            validData.length === dataTeam.length ? setError(null) : setError('veuillez remplir tous les champs')
+            if (validData.length === dataTeam.length ) {
+                dispatch({type : 'ADD_TEAMS_NAME', payload : dataTeam});
+                history.push('/jeu');
+                setError(null)
+            }
+            else {
+                setError('veuillez remplir tous les champs')
+            }
         }
         else {
             setError('veuillez remplir tous les champs')
