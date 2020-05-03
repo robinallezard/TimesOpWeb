@@ -28285,7 +28285,16 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"node_modules/react-dom/cjs/react-dom.development.js"}],"src/store.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"node_modules/react-dom/cjs/react-dom.development.js"}],"src/words.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.words = void 0;
+var words = ['Jean-Jacques Goldman', 'Omar Sy', 'Dany Boon', 'Kylian Mbappé', 'Thomas Pesquet', 'Zinédine Zidane', 'Michel Cymes', 'Jean Reno', 'Jean-Paul Belmondo', 'Soprano', 'Jean-Pierre Pernaut', 'Teddy Riner', 'Michel Sardou', 'Jean Dujardin', 'Antoine Griezmann', 'Sophie Marceau', 'Jean-Luc Reichmann', 'Laurent Gerra', 'Renaud', 'Fabrice Luchini', 'Francis Cabrel', 'Jamel Debbouze', 'Florence Foresti', 'Gad Elmaleh', 'Gérard Jugnot', 'Mimie Mathy', 'Patrick Bruel', 'Stéphane Bern', 'N\'Golo Kanté', 'Florent Pagny', 'Élise Lucet', 'Louane', 'Nagui', 'Alain Souchon', 'Didier Deschamps', 'Franck Dubosc', 'Valérie Lemercier', 'Muriel Robin', 'Mylène Farmer', 'Josiane Balasko', 'Ingrid Chauvin', 'Karine Le Marchand', 'Nicolas Hulot', 'Kad Merad', 'Zazie', 'Nolwenn Leroy', 'Line Renaud', 'Hugo Lloris', 'Nicolas Canteloup', 'Paul Pogba'];
+exports.words = words;
+},{}],"src/store.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28294,6 +28303,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.StateProvider = exports.store = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
+
+var _words = require("./words");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
@@ -28318,9 +28329,10 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var initialState = {
+  words: [],
   equipes: [{
     id: 'equipe1',
-    nom: '',
+    nom: 'Equipe 1',
     points: {
       manche1: null,
       manche2: null,
@@ -28328,18 +28340,31 @@ var initialState = {
     }
   }, {
     id: 'equipe2',
-    nom: '',
+    nom: 'Equipe 2',
     points: {
       manche1: null,
       manche2: null,
       manche3: null
     }
-  }]
+  }],
+  currentManche: 1
 }; // toutes les célébrités + un objet avec le nom de l'équipe + les points à chaque manche.
 
 var store = (0, _react.createContext)(initialState);
 exports.store = store;
 var Provider = store.Provider; // permet de transmettre au children les données
+
+function chooseWords(ar, l) {
+  var arrayWords = [];
+  /* TODO : faire ens orte que les valeurs ne peuvent revenir */
+
+  for (var i = 0; i < l; i++) {
+    arrayWords[i] = ar[Math.floor(Math.random() * ar.length)];
+    console.log(arrayWords[i]);
+  }
+
+  return arrayWords;
+}
 
 var StateProvider = function StateProvider(_ref) {
   var children = _ref.children;
@@ -28354,8 +28379,14 @@ var StateProvider = function StateProvider(_ref) {
           equipes: payload
         });
 
+      case 'ADD_WORDS':
+        var wordsList = chooseWords(_words.words, 20);
+        return _objectSpread(_objectSpread({}, state), {}, {
+          words: wordsList
+        });
+
       default:
-        console.log('rien');
+        console.log('default');
         return state;
     }
   }, initialState),
@@ -28372,7 +28403,7 @@ var StateProvider = function StateProvider(_ref) {
 };
 
 exports.StateProvider = StateProvider;
-},{"react":"node_modules/react/index.js"}],"node_modules/@babel/runtime/helpers/esm/inheritsLoose.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./words":"src/words.js"}],"node_modules/@babel/runtime/helpers/esm/inheritsLoose.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32348,7 +32379,7 @@ function Home(_ref) {
           type: 'ADD_TEAMS_NAME',
           payload: dataTeam
         });
-        history.push('/jeu');
+        history.push('/recap');
         setError(null);
       } else {
         setError('veuillez remplir tous les champs');
@@ -32431,17 +32462,100 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _store = require("../store.js");
+
+var _reactRouterDom = require("react-router-dom");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function Recap() {
-  return /*#__PURE__*/_react.default.createElement("div", null);
+  var globalState = (0, _react.useContext)(_store.store);
+  var state = globalState.state,
+      dispatch = globalState.dispatch;
+  console.log(state);
+
+  var _useState = (0, _react.useState)(state.equipes),
+      _useState2 = _slicedToArray(_useState, 2),
+      teamsInfo = _useState2[0],
+      setTeamsInfo = _useState2[1];
+
+  function handleClick() {
+    dispatch({
+      type: 'ADD_WORDS'
+    });
+  }
+
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h1", {
+    className: "text-4xl font-bold mb-8 text-purple-600"
+  }, "Time's OP !"), /*#__PURE__*/_react.default.createElement("table", {
+    className: "table-auto w-full rounded-md overflow-hidden text-center shadow-base"
+  }, /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", {
+    className: "py-3 px-2 border-box text-white bg-purple-800"
+  }, "Manche"), teamsInfo.map(function (equipe, index) {
+    return /*#__PURE__*/_react.default.createElement("th", {
+      key: index,
+      className: "py-3 text-white bg-purple-800"
+    }, equipe.nom);
+  }))), /*#__PURE__*/_react.default.createElement("tbody", null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("td", {
+    className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+  }, "Tout les mots"), teamsInfo.map(function (equipe, index) {
+    var _React$createElement;
+
+    return equipe.points.manche1 ? /*#__PURE__*/_react.default.createElement("td", (_React$createElement = {
+      key: index
+    }, _defineProperty(_React$createElement, "key", index), _defineProperty(_React$createElement, "className", "py-3 px-2 border-box text-gray-800 bg-purple-200"), _React$createElement), equipe.nom) : /*#__PURE__*/_react.default.createElement("td", {
+      key: index,
+      className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+    }, "/");
+  })), /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("td", {
+    className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+  }, "Un seul mot"), teamsInfo.map(function (equipe, index) {
+    return equipe.points.manche2 ? /*#__PURE__*/_react.default.createElement("td", {
+      key: index,
+      className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+    }, equipe.nom) : /*#__PURE__*/_react.default.createElement("td", {
+      key: index,
+      className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+    }, "/");
+  })), /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("td", {
+    className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+  }, "Le mime"), teamsInfo.map(function (equipe, index) {
+    return equipe.points.manche3 ? /*#__PURE__*/_react.default.createElement("td", {
+      key: index,
+      className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+    }, equipe.nom) : /*#__PURE__*/_react.default.createElement("td", {
+      key: index,
+      className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+    }, "/");
+  })))), /*#__PURE__*/_react.default.createElement("button", {
+    onClick: function onClick() {
+      return handleClick();
+    },
+    className: "transition-all duration-200 text-white text-lg bg-purple-800 hover:bg-purple-700 p-10 pt-3 pb-3 rounded-lg mt-8"
+  }, "Jouer la manche ", state.currentManche, " !"));
 }
 
 var _default = Recap;
 exports.default = _default;
-},{"react":"node_modules/react/index.js"}],"src/App.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","../store.js":"src/store.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js"}],"src/App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -29,7 +29,7 @@ function Home({props}) {
 
             if (validData.length === dataTeam.length ) {
                 dispatch({type : 'ADD_TEAMS_NAME', payload : dataTeam});
-                history.push('/jeu');
+                history.push('/recap');
                 setError(null)
             }
             else {
