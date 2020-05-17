@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import { store } from '../store.js';
 import { useHistory } from "react-router-dom";
 
@@ -7,10 +7,14 @@ function Home() {
     const { state, dispatch } = globalState;
     const [dataTeam, setDataTeam] = useState(state.equipes);
     let history = useHistory();
-
     
     const [error, setError] = useState(null);
-    
+
+    useEffect( () => {
+        dispatch({type : 'ADD_WORDS'});
+    },[]);
+
+
     const handleChange = e => {
         
         const {value, name} = e.target;

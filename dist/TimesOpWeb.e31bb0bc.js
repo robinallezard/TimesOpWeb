@@ -28310,6 +28310,14 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -28329,25 +28337,38 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var initialState = {
-  words: ['test', 'test5461'],
+  words: ['test', 'test5461', 'sdksnfvfv', 'qdfv,dqf'],
   equipes: [{
     id: 'equipe1',
     nom: 'Equipe 1',
+    color: 'text-red-600',
     points: {
-      manche1: null,
-      manche2: null,
-      manche3: null
+      manche0: [],
+      manche1: [],
+      manche2: []
     }
   }, {
     id: 'equipe2',
     nom: 'Equipe 2',
+    color: 'text-blue-600',
     points: {
-      manche1: null,
-      manche2: null,
-      manche3: null
+      manche0: [],
+      manche1: [],
+      manche2: []
     }
   }],
-  currentManche: 1
+  manches: [{
+    index: 'manche 1',
+    wordsTofinds: null
+  }, {
+    index: 'manche 2',
+    wordsTofinds: null
+  }, {
+    index: 'manche 3',
+    wordsTofinds: null
+  }],
+  currentManche: 0,
+  currentPlayer: 1
 }; // toutes les célébrités + un objet avec le nom de l'équipe + les points à chaque manche.
 
 var store = (0, _react.createContext)(initialState);
@@ -28371,8 +28392,12 @@ var StateProvider = function StateProvider(_ref) {
   var _useReducer = (0, _react.useReducer)(function (state, action) {
     var type = action.type,
         payload = action.payload;
+    var currentPlayer = state.currentPlayer,
+        currentManche = state.currentManche,
+        equipes = state.equipes,
+        manches = state.manches;
 
-    switch (action.type) {
+    switch (type) {
       case 'ADD_TEAMS_NAME':
         return _objectSpread(_objectSpread({}, state), {}, {
           equipes: payload
@@ -28380,8 +28405,64 @@ var StateProvider = function StateProvider(_ref) {
 
       case 'ADD_WORDS':
         var wordsList = chooseWords(_words.words, 20);
+        var wordsListToManche = state.manches.map(function (el) {
+          return _objectSpread(_objectSpread({}, el), {}, {
+            wordsTofinds: wordsList
+          });
+        });
         return _objectSpread(_objectSpread({}, state), {}, {
-          words: wordsList
+          words: wordsList,
+          manches: wordsListToManche
+        });
+
+      case 'CHANGE_CURRENT_TEAM':
+        var SwitchPlayer = currentPlayer === 1 ? 2 : 1;
+        return _objectSpread(_objectSpread({}, state), {}, {
+          currentPlayer: SwitchPlayer
+        });
+
+      case 'ADD_POINTS':
+        var player = currentPlayer === 1 ? 0 : 1; // obligé par rapport à l'index 0du tableau
+
+        var updateTeam = equipes.map(function (equipe, index) {
+          if (index === player) {
+            console.log('test');
+            return _objectSpread(_objectSpread({}, equipe), {}, {
+              points: _objectSpread(_objectSpread({}, equipe.points), {}, _defineProperty({}, 'manche' + currentManche, [].concat(_toConsumableArray(equipe.points['manche' + currentManche]), _toConsumableArray(payload))))
+            });
+          } else {
+            return _objectSpread({}, equipe);
+          }
+        });
+        return _objectSpread(_objectSpread({}, state), {}, {
+          equipes: updateTeam
+        });
+
+      case 'MAJ_WORD_LIST_MANCHE':
+        var updateManchesWord = manches.map(function (manche, index) {
+          if (index === currentManche) {
+            return _objectSpread(_objectSpread({}, manche), {}, {
+              wordsTofinds: payload
+            });
+          } else {
+            return _objectSpread({}, manche);
+          }
+        });
+        var changeManche;
+
+        if (payload.length === 0) {
+          if (currentManche < 2) {
+            changeManche = currentManche + 1;
+          } else {
+            changeManche = 10;
+          }
+        } else {
+          changeManche = currentManche;
+        }
+
+        return _objectSpread(_objectSpread({}, state), {}, {
+          manches: updateManchesWord,
+          currentManche: changeManche
         });
 
       default:
@@ -32352,6 +32433,12 @@ function Home() {
       error = _useState4[0],
       setError = _useState4[1];
 
+  (0, _react.useEffect)(function () {
+    dispatch({
+      type: 'ADD_WORDS'
+    });
+  }, []);
+
   var handleChange = function handleChange(e) {
     var _e$target = e.target,
         value = _e$target.value,
@@ -32452,6 +32539,14 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -32468,26 +32563,45 @@ function Jeu() {
   var globalState = (0, _react.useContext)(_store.store);
   var state = globalState.state,
       dispatch = globalState.dispatch;
+  var currentManche = state.currentManche;
 
   var _useState = (0, _react.useState)(30),
       _useState2 = _slicedToArray(_useState, 2),
       seconds = _useState2[0],
       setSeconds = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(state.words),
+  var _useState3 = (0, _react.useState)(state.manches[currentManche].wordsTofinds),
       _useState4 = _slicedToArray(_useState3, 2),
       mots = _useState4[0],
-      setMots = _useState4[1];
+      setMots = _useState4[1]; // tout les mots de la manche
+
+
+  var _useState5 = (0, _react.useState)([]),
+      _useState6 = _slicedToArray(_useState5, 2),
+      found = _useState6[0],
+      setFound = _useState6[1]; // les mots trouvés par le joueur courrant
+
 
   var history = (0, _reactRouterDom.useHistory)();
   (0, _react.useEffect)(function () {
     var interval = null;
 
-    if (seconds > 0) {
+    if (seconds > 0 && mots.length !== 0) {
       interval = setInterval(function () {
         setSeconds(seconds - 1);
       }, 1000);
     } else {
+      dispatch({
+        type: 'ADD_POINTS',
+        payload: found
+      });
+      dispatch({
+        type: 'MAJ_WORD_LIST_MANCHE',
+        payload: mots
+      });
+      dispatch({
+        type: 'CHANGE_CURRENT_TEAM'
+      });
       history.push('/recap');
     }
 
@@ -32496,13 +32610,29 @@ function Jeu() {
     };
   });
 
+  function looseTime() {
+    setSeconds(seconds - 3);
+    var firstItem = mots[0];
+    setMots(function (el) {
+      var removeFirst = mots.filter(function (item, index) {
+        return index !== 0;
+      }); // on enlève le premier item...
+
+      el = [].concat(_toConsumableArray(removeFirst), [firstItem]); // ...pour le mettre en dernier
+
+      return el;
+    });
+  }
+
   function updateTable() {
-    if (mots.length > 1) {
+    if (mots.length > 0) {
+      var wordFound = mots[0];
+      setFound(function (prevFound) {
+        return [].concat(_toConsumableArray(prevFound), [wordFound]);
+      });
       setMots(mots.filter(function (item, index) {
         return index !== 0;
       }));
-    } else {
-      history.push('/recap');
     }
   }
 
@@ -32521,7 +32651,7 @@ function Jeu() {
     className: "text-white  text-2xl bg-green-600 hover:bg-green-800 px-6 py-3 rounded-lg mr-10"
   }, "Trouv\xE9 !"), /*#__PURE__*/_react.default.createElement("button", {
     onClick: function onClick() {
-      return setSeconds(seconds - 3);
+      return looseTime();
     },
     className: "text-white text-2xl bg-red-600 hover:bg-red-800 px-6 py-3 rounded-lg"
   }, "Je passe")));
@@ -32529,7 +32659,46 @@ function Jeu() {
 
 var _default = Jeu;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","../store.js":"src/store.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js"}],"src/Components/Recap.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","../store.js":"src/store.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js"}],"src/Components/Win.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _store = require("../store.js");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function Win() {
+  var globalState = (0, _react.useContext)(_store.store);
+  var state = globalState.state,
+      dispatch = globalState.dispatch;
+  var winner = null;
+  var totalPoints1 = state.equipes[0].points.manche0.length + state.equipes[0].points.manche1.length + state.equipes[0].points.manche2.length;
+  var totalPoints2 = state.equipes[1].points.manche0.length + state.equipes[1].points.manche1.length + state.equipes[1].points.manche2.length;
+
+  if (totalPoints1 < totalPoints2) {
+    winner = state.equipes[1].nom;
+  } else if (totalPoints1 > totalPoints2) {
+    winner = state.equipes[0].nom;
+  } else {
+    winner = null;
+  }
+
+  return /*#__PURE__*/_react.default.createElement("h1", {
+    className: "text-4xl font-bold mb-8"
+  }, winner === null ? 'C\'est un match nul ;)' : 'L\'équipe ' + winner + ' remporte la partie ! :D');
+}
+
+var _default = Win;
+exports.default = _default;
+},{"react":"node_modules/react/index.js","../store.js":"src/store.js"}],"src/Components/Recap.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32572,17 +32741,24 @@ function Recap() {
       teamsInfo = _useState2[0],
       setTeamsInfo = _useState2[1];
 
+  var _useState3 = (0, _react.useState)(state.currentPlayer === 1 ? state.equipes[0] : state.equipes[1]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      currentTeam = _useState4[0],
+      setCurrentTeam = _useState4[1];
+
   function handleClick() {
-    dispatch({
-      type: 'ADD_WORDS'
-    });
     history.push('/jeu');
   }
 
+  (0, _react.useEffect)(function () {
+    if (state.currentManche === 10) {
+      history.push('/win');
+    }
+  });
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h1", {
     className: "text-4xl font-bold mb-8 text-purple-600"
   }, "Time's OP !"), /*#__PURE__*/_react.default.createElement("table", {
-    className: "table-auto w-full rounded-md overflow-hidden text-center shadow-base"
+    className: "table-auto  rounded-md overflow-hidden text-center shadow-base w-4/6"
   }, /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", {
     className: "py-3 px-2 border-box text-white bg-purple-800"
   }, "Manche"), teamsInfo.map(function (equipe, index) {
@@ -32590,43 +32766,49 @@ function Recap() {
       key: index,
       className: "py-3 text-white bg-purple-800"
     }, equipe.nom);
-  }))), /*#__PURE__*/_react.default.createElement("tbody", null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("td", {
-    className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+  }))), /*#__PURE__*/_react.default.createElement("tbody", null, /*#__PURE__*/_react.default.createElement("tr", {
+    className: state.currentManche === 0 ? 'bg-orange-300' : 'bg-purple-200'
+  }, /*#__PURE__*/_react.default.createElement("td", {
+    className: "py-3 px-2 border-box text-gray-800"
   }, "Tout les mots"), teamsInfo.map(function (equipe, index) {
     var _React$createElement;
 
-    return equipe.points.manche1 ? /*#__PURE__*/_react.default.createElement("td", (_React$createElement = {
+    return equipe.points.manche0.length !== 0 ? /*#__PURE__*/_react.default.createElement("td", (_React$createElement = {
       key: index
-    }, _defineProperty(_React$createElement, "key", index), _defineProperty(_React$createElement, "className", "py-3 px-2 border-box text-gray-800 bg-purple-200"), _React$createElement), equipe.nom) : /*#__PURE__*/_react.default.createElement("td", {
+    }, _defineProperty(_React$createElement, "key", index), _defineProperty(_React$createElement, "className", "py-3 px-2 border-box text-gray-800"), _React$createElement), equipe.points.manche0.length) : /*#__PURE__*/_react.default.createElement("td", {
       key: index,
-      className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+      className: "py-3 px-2 border-box text-gray-800"
     }, "/");
-  })), /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("td", {
-    className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+  })), /*#__PURE__*/_react.default.createElement("tr", {
+    className: state.currentManche === 1 ? 'bg-orange-300' : 'bg-purple-200'
+  }, /*#__PURE__*/_react.default.createElement("td", {
+    className: "py-3 px-2 border-box text-gray-800"
   }, "Un seul mot"), teamsInfo.map(function (equipe, index) {
-    return equipe.points.manche2 ? /*#__PURE__*/_react.default.createElement("td", {
+    return equipe.points.manche1.length ? /*#__PURE__*/_react.default.createElement("td", {
       key: index,
-      className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
-    }, equipe.nom) : /*#__PURE__*/_react.default.createElement("td", {
+      className: "py-3 px-2 border-box text-gray-800 "
+    }, equipe.points.manche1.length) : /*#__PURE__*/_react.default.createElement("td", {
       key: index,
-      className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+      className: "py-3 px-2 border-box text-gray-800"
     }, "/");
-  })), /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("td", {
-    className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+  })), /*#__PURE__*/_react.default.createElement("tr", {
+    className: state.currentManche === 2 ? 'bg-orange-300' : 'bg-purple-200'
+  }, /*#__PURE__*/_react.default.createElement("td", {
+    className: "py-3 px-2 border-box text-gray-800"
   }, "Le mime"), teamsInfo.map(function (equipe, index) {
-    return equipe.points.manche3 ? /*#__PURE__*/_react.default.createElement("td", {
+    return equipe.points.manche2.length ? /*#__PURE__*/_react.default.createElement("td", {
       key: index,
-      className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
-    }, equipe.nom) : /*#__PURE__*/_react.default.createElement("td", {
+      className: "py-3 px-2 border-box text-gray-800 "
+    }, equipe.points.manche2.length) : /*#__PURE__*/_react.default.createElement("td", {
       key: index,
-      className: "py-3 px-2 border-box text-gray-800 bg-purple-200"
+      className: "py-3 px-2 border-box text-gray-800"
     }, "/");
   })))), /*#__PURE__*/_react.default.createElement("button", {
     onClick: function onClick() {
       return handleClick();
     },
     className: "transition-all duration-200 text-white text-lg bg-purple-800 hover:bg-purple-700 p-10 pt-3 pb-3 rounded-lg mt-8"
-  }, "Jouer la manche ", state.currentManche, " !"));
+  }, "c'est au tour de l'\xE9quipe ", currentTeam.nom, " !"));
 }
 
 var _default = Recap;
@@ -32639,7 +32821,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireWildcard(require("react"));
+var _react = _interopRequireDefault(require("react"));
 
 var _store = require("./store.js");
 
@@ -32649,13 +32831,11 @@ var _Home = _interopRequireDefault(require("./Components/Home.js"));
 
 var _Jeu = _interopRequireDefault(require("./Components/Jeu.js"));
 
+var _Win = _interopRequireDefault(require("./Components/Win.js"));
+
 var _Recap = _interopRequireDefault(require("./Components/Recap.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function App() {
   return /*#__PURE__*/_react.default.createElement(_store.StateProvider, null, /*#__PURE__*/_react.default.createElement("div", {
@@ -32665,13 +32845,15 @@ function App() {
   }, /*#__PURE__*/_react.default.createElement(_Jeu.default, null)), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
     path: "/recap"
   }, /*#__PURE__*/_react.default.createElement(_Recap.default, null)), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+    path: "/win"
+  }, /*#__PURE__*/_react.default.createElement(_Win.default, null)), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
     path: "/"
   }, /*#__PURE__*/_react.default.createElement(_Home.default, null))))));
 }
 
 var _default = App;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","./store.js":"src/store.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./Components/Home.js":"src/Components/Home.js","./Components/Jeu.js":"src/Components/Jeu.js","./Components/Recap.js":"src/Components/Recap.js"}],"index.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./store.js":"src/store.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./Components/Home.js":"src/Components/Home.js","./Components/Jeu.js":"src/Components/Jeu.js","./Components/Win.js":"src/Components/Win.js","./Components/Recap.js":"src/Components/Recap.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -32711,7 +32893,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61698" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52376" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
