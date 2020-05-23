@@ -28292,7 +28292,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.words = void 0;
-var words = ['Jean-Jacques Goldman', 'Omar Sy', 'Dany Boon', 'Kylian Mbappé', 'Thomas Pesquet', 'Zinédine Zidane', 'Michel Cymes', 'Jean Reno', 'Jean-Paul Belmondo', 'Soprano', 'Jean-Pierre Pernaut', 'Teddy Riner', 'Michel Sardou', 'Jean Dujardin', 'Antoine Griezmann', 'Sophie Marceau', 'Jean-Luc Reichmann', 'Laurent Gerra', 'Renaud', 'Fabrice Luchini', 'Francis Cabrel', 'Jamel Debbouze', 'Florence Foresti', 'Gad Elmaleh', 'Gérard Jugnot', 'Mimie Mathy', 'Patrick Bruel', 'Stéphane Bern', 'N\'Golo Kanté', 'Florent Pagny', 'Élise Lucet', 'Louane', 'Nagui', 'Alain Souchon', 'Didier Deschamps', 'Franck Dubosc', 'Valérie Lemercier', 'Muriel Robin', 'Mylène Farmer', 'Josiane Balasko', 'Ingrid Chauvin', 'Karine Le Marchand', 'Nicolas Hulot', 'Kad Merad', 'Zazie', 'Nolwenn Leroy', 'Line Renaud', 'Hugo Lloris', 'Nicolas Canteloup', 'Paul Pogba'];
+var words = ['Jean-Jacques Goldman', 'Omar Sy', 'Dany Boon', 'Kylian Mbappé', 'Thomas Pesquet', 'Zinédine Zidane', 'Michel Cymes', 'Jean Reno', 'Jean-Paul Belmondo', 'Soprano', 'Jean-Pierre Pernaut', 'Teddy Riner', 'Michel Sardou', 'Jean Dujardin', 'Antoine Griezmann', 'Sophie Marceau', 'Jean-Luc Reichmann', 'Laurent Gerra', 'Renaud', 'Fabrice Luchini', 'Francis Cabrel', 'Jamel Debbouze', 'Florence Foresti', 'Gad Elmaleh', 'Gérard Jugnot', 'Mimie Mathy', 'Patrick Bruel', 'Stéphane Bern', 'N\'Golo Kanté', 'Florent Pagny', 'Élise Lucet', 'Louane', 'Nagui', 'Alain Souchon', 'Didier Deschamps', 'Franck Dubosc', 'Valérie Lemercier', 'Muriel Robin', 'Mylène Farmer', 'Josiane Balasko', 'Ingrid Chauvin', 'Karine Le Marchand', 'Nicolas Hulot', 'Kad Merad', 'Zazie', 'Nolwenn Leroy', 'Line Renaud', 'Hugo Lloris', 'Nicolas Canteloup', 'Paul Pogba', 'chien', 'chat', 'bonobo', 'pantere', 'gorille', 'Nicolas Sarkozy', 'Romain Bardet', 'Lans Amrstrong', 'Louis Armstrong', 'Neil Armstrong', 'Joe Dassin', 'T-rex', 'Louis XVI', 'Napoléon', 'Hitler', 'Émile Zola', 'Voltaire', 'Léonard De vinci', 'Cycliste', 'Pianniste', 'Christophe Colomb', 'Jules César', 'Harry Potter', 'FBN', 'Drake', 'Écureil', 'Licorne', 'Le panda du takenoko', 'Forest Gump', 'Bob l\'éponge', 'Homer Simpson'];
 exports.words = words;
 },{}],"src/store.js":[function(require,module,exports) {
 "use strict";
@@ -28310,14 +28310,6 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -28328,13 +28320,21 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 var initialState = {
   words: ['test', 'test5461', 'sdksnfvfv', 'qdfv,dqf'],
@@ -28377,10 +28377,20 @@ var Provider = store.Provider; // permet de transmettre au children les données
 
 function chooseWords(ar, l) {
   var arrayWords = [];
-  /* TODO : faire ens orte que les valeurs ne peuvent revenir */
 
-  for (var i = 0; i < l; i++) {
-    arrayWords[i] = ar[Math.floor(Math.random() * ar.length)];
+  var _loop = function _loop() {
+    var newWordToAdd = ar[Math.floor(Math.random() * ar.length)];
+    var doublon = arrayWords.find(function (el) {
+      return el === newWordToAdd;
+    });
+
+    if (typeof doublon === 'undefined') {
+      arrayWords = [].concat(_toConsumableArray(arrayWords), [newWordToAdd]);
+    }
+  };
+
+  while (arrayWords.length < l) {
+    _loop();
   }
 
   return arrayWords;
@@ -28426,7 +28436,6 @@ var StateProvider = function StateProvider(_ref) {
 
         var updateTeam = equipes.map(function (equipe, index) {
           if (index === player) {
-            console.log('test');
             return _objectSpread(_objectSpread({}, equipe), {}, {
               points: _objectSpread(_objectSpread({}, equipe.points), {}, _defineProperty({}, 'manche' + currentManche, [].concat(_toConsumableArray(equipe.points['manche' + currentManche]), _toConsumableArray(payload))))
             });
@@ -32582,6 +32591,11 @@ function Jeu() {
       setFound = _useState6[1]; // les mots trouvés par le joueur courrant
 
 
+  var _useState7 = (0, _react.useState)(mots[Math.floor(Math.random() * mots.length)]),
+      _useState8 = _slicedToArray(_useState7, 2),
+      currentWord = _useState8[0],
+      setCurrentWord = _useState8[1];
+
   var history = (0, _reactRouterDom.useHistory)();
   (0, _react.useEffect)(function () {
     var interval = null;
@@ -32611,28 +32625,27 @@ function Jeu() {
   });
 
   function looseTime() {
-    setSeconds(seconds - 3);
-    var firstItem = mots[0];
-    setMots(function (el) {
-      var removeFirst = mots.filter(function (item, index) {
-        return index !== 0;
-      }); // on enlève le premier item...
+    var newWord = mots[Math.floor(Math.random() * mots.length)];
+    console.log(newWord);
 
-      el = [].concat(_toConsumableArray(removeFirst), [firstItem]); // ...pour le mettre en dernier
-
-      return el;
-    });
+    if (newWord === currentWord) {
+      looseTime();
+    } else {
+      setSeconds(seconds - 3);
+      setCurrentWord(newWord);
+    }
   }
 
   function updateTable() {
     if (mots.length > 0) {
-      var wordFound = mots[0];
       setFound(function (prevFound) {
-        return [].concat(_toConsumableArray(prevFound), [wordFound]);
+        return [].concat(_toConsumableArray(prevFound), [currentWord]);
       });
-      setMots(mots.filter(function (item, index) {
-        return index !== 0;
+      setMots(mots.filter(function (item) {
+        return item !== currentWord;
       }));
+      setCurrentWord(mots[Math.floor(Math.random() * mots.length)]);
+      console.log('courant ' + currentWord);
     }
   }
 
@@ -32642,7 +32655,7 @@ function Jeu() {
     className: "text-purple-500"
   }, seconds), " secondes"), /*#__PURE__*/_react.default.createElement("strong", {
     className: "text-6xl font-bold mb-10"
-  }, mots[0]), /*#__PURE__*/_react.default.createElement("div", {
+  }, currentWord), /*#__PURE__*/_react.default.createElement("div", {
     className: "flex mt-5"
   }, /*#__PURE__*/_react.default.createElement("button", {
     onClick: function onClick() {
@@ -32893,7 +32906,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52376" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51363" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

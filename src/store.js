@@ -52,12 +52,17 @@ const { Provider } = store; // permet de transmettre au children les données
 
 
 function chooseWords(ar, l) {
-    const arrayWords = [];
+    let arrayWords = [];
+    
+    while(arrayWords.length < l) {
+        
+        let newWordToAdd = ar[Math.floor(Math.random()*ar.length)];
 
-    /* TODO : faire ens orte que les valeurs ne peuvent revenir */
+        const doublon = arrayWords.find(el => el === newWordToAdd);
 
-    for( let i = 0; i < l; i++) {
-        arrayWords[i] = ar[Math.floor(Math.random()*ar.length)];
+        if(typeof doublon === 'undefined') {
+            arrayWords = [...arrayWords, newWordToAdd]
+        }
     }
     return arrayWords;
 }
@@ -99,7 +104,6 @@ const StateProvider = ({children}) => {
                 
                 const updateTeam = equipes.map((equipe, index) => {
                     if(index === player) {
-                        console.log('test');
                         
                         return {
                             ...equipe,
