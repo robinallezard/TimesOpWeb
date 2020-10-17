@@ -28337,7 +28337,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 var initialState = {
-  words: ['test', 'test5461', 'sdksnfvfv', 'qdfv,dqf'],
+  words: [],
   equipes: [{
     id: 'equipe1',
     nom: 'Equipe 1',
@@ -28406,8 +28406,12 @@ var StateProvider = function StateProvider(_ref) {
         currentManche = state.currentManche,
         equipes = state.equipes,
         manches = state.manches;
+    console.log(state);
 
     switch (type) {
+      case 'RESTART_GAME':
+        return initialState;
+
       case 'ADD_TEAMS_NAME':
         return _objectSpread(_objectSpread({}, state), {}, {
           equipes: payload
@@ -28475,7 +28479,6 @@ var StateProvider = function StateProvider(_ref) {
         });
 
       default:
-        console.log('default');
         return state;
     }
   }, initialState),
@@ -32506,7 +32509,8 @@ function Home() {
     },
     type: "text",
     name: "equipe1",
-    id: "equipe1"
+    id: "equipe1",
+    required: true
   })), /*#__PURE__*/_react.default.createElement("label", {
     className: "flex flex-col w-full items-start",
     htmlFor: "equipe2"
@@ -32519,7 +32523,8 @@ function Home() {
     },
     type: "text",
     name: "equipe2",
-    id: "equipe2"
+    id: "equipe2",
+    required: true
   })), error ? /*#__PURE__*/_react.default.createElement("div", {
     className: "bg-red-500 p-4 text-white rounded-lg box-border w-full mt-4"
   }, error) : null, /*#__PURE__*/_react.default.createElement("button", {
@@ -32573,6 +32578,7 @@ function Jeu() {
   var state = globalState.state,
       dispatch = globalState.dispatch;
   var currentManche = state.currentManche;
+  var history = (0, _reactRouterDom.useHistory)();
 
   var _useState = (0, _react.useState)(30),
       _useState2 = _slicedToArray(_useState, 2),
@@ -32591,47 +32597,47 @@ function Jeu() {
       setFound = _useState6[1]; // les mots trouvés par le joueur courrant
 
 
-  var _useState7 = (0, _react.useState)(mots[Math.floor(Math.random() * mots.length)]),
+  var _useState7 = (0, _react.useState)(mots ? mots[Math.floor(Math.random() * (mots === null || mots === void 0 ? void 0 : mots.length))] : null),
       _useState8 = _slicedToArray(_useState7, 2),
       currentWord = _useState8[0],
       setCurrentWord = _useState8[1];
 
-  var history = (0, _reactRouterDom.useHistory)();
   (0, _react.useEffect)(function () {
-    var interval = null;
+    if (mots) {
+      var interval = null;
 
-    if (seconds > 0 && mots.length !== 0) {
-      interval = setInterval(function () {
-        setSeconds(seconds - 1);
-      }, 1000);
-    } else {
-      dispatch({
-        type: 'ADD_POINTS',
-        payload: found
-      });
-      dispatch({
-        type: 'MAJ_WORD_LIST_MANCHE',
-        payload: mots
-      });
-      dispatch({
-        type: 'CHANGE_CURRENT_TEAM'
-      });
-      history.push('/recap');
+      if (seconds > 0 && mots.length !== 0) {
+        interval = setInterval(function () {
+          setSeconds(seconds - 1);
+        }, 1000);
+      } else {
+        dispatch({
+          type: 'ADD_POINTS',
+          payload: found
+        });
+        dispatch({
+          type: 'MAJ_WORD_LIST_MANCHE',
+          payload: mots
+        });
+        dispatch({
+          type: 'CHANGE_CURRENT_TEAM'
+        });
+        history.push('/recap');
+      }
+
+      return function () {
+        return clearInterval(interval);
+      };
     }
 
-    return function () {
-      return clearInterval(interval);
-    };
+    history.push('/');
   });
 
   function looseTime() {
     var newWord = mots[Math.floor(Math.random() * mots.length)];
-    console.log(newWord);
+    setSeconds(seconds - 3);
 
-    if (newWord === currentWord) {
-      looseTime();
-    } else {
-      setSeconds(seconds - 3);
+    if (newWord !== currentWord) {
       setCurrentWord(newWord);
     }
   }
@@ -32644,12 +32650,19 @@ function Jeu() {
       setMots(mots.filter(function (item) {
         return item !== currentWord;
       }));
-      setCurrentWord(mots[Math.floor(Math.random() * mots.length)]);
-      console.log('courant ' + currentWord);
+      setCurrentWord(function () {
+        var changeWord = mots[Math.floor(Math.random() * mots.length)];
+
+        if (changeWord === currentWord) {
+          return mots[Math.floor(Math.random() * mots.length)];
+        } else {
+          return changeWord;
+        }
+      });
     }
   }
 
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h1", {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, mots && currentWord ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h1", {
     className: "text-4xl font-bold mb-5"
   }, "Il reste ", /*#__PURE__*/_react.default.createElement("span", {
     className: "text-purple-500"
@@ -32667,7 +32680,12 @@ function Jeu() {
       return looseTime();
     },
     className: "text-white text-2xl bg-red-600 hover:bg-red-800 px-6 py-3 rounded-lg"
-  }, "Je passe")));
+  }, "Je passe"))) : /*#__PURE__*/_react.default.createElement("h1", {
+    className: "text-4xl font-bold mb-5"
+  }, "une erreur s'est produite ", /*#__PURE__*/_react.default.createElement("a", {
+    href: "/",
+    className: "block bg-purple-600"
+  }, "Revenir \xE0 l'accueil")));
 }
 
 var _default = Jeu;
@@ -32684,6 +32702,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _store = require("../store.js");
 
+var _reactRouterDom = require("react-router-dom");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -32693,10 +32713,13 @@ function Win() {
   var state = globalState.state,
       dispatch = globalState.dispatch;
   var winner = null;
+  var history = (0, _reactRouterDom.useHistory)();
   var totalPoints1 = state.equipes[0].points.manche0.length + state.equipes[0].points.manche1.length + state.equipes[0].points.manche2.length;
   var totalPoints2 = state.equipes[1].points.manche0.length + state.equipes[1].points.manche1.length + state.equipes[1].points.manche2.length;
 
-  if (totalPoints1 < totalPoints2) {
+  if (totalPoints1 === 0 && totalPoints2 === 0) {
+    history.push('/');
+  } else if (totalPoints1 < totalPoints2) {
     winner = state.equipes[1].nom;
   } else if (totalPoints1 > totalPoints2) {
     winner = state.equipes[0].nom;
@@ -32706,12 +32729,19 @@ function Win() {
 
   return /*#__PURE__*/_react.default.createElement("h1", {
     className: "text-4xl font-bold mb-8"
-  }, winner === null ? 'C\'est un match nul ;)' : 'L\'équipe ' + winner + ' remporte la partie ! :D');
+  }, winner === null ? 'C\'est un match nul ;)' : 'L\'équipe ' + winner + ' remporte la partie ! :D', /*#__PURE__*/_react.default.createElement("button", {
+    className: "block mt-8 mx-auto transition-all duration-200 text-white text-lg bg-purple-600 hover:bg-purple-700 p-10 pt-3 pb-3 rounded-lg mt-8",
+    onClick: function onClick() {
+      return dispatch({
+        type: 'RESTART_GAME'
+      });
+    }
+  }, "Rejouer !"));
 }
 
 var _default = Win;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","../store.js":"src/store.js"}],"src/Components/Recap.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","../store.js":"src/store.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js"}],"src/Components/Recap.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32768,6 +32798,11 @@ function Recap() {
       history.push('/win');
     }
   });
+
+  if ((state === null || state === void 0 ? void 0 : state.words.length) < 1) {
+    history.push('/');
+  }
+
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h1", {
     className: "text-4xl font-bold mb-8 text-purple-600"
   }, "Time's OP !"), /*#__PURE__*/_react.default.createElement("table", {
@@ -32906,7 +32941,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51363" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60139" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

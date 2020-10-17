@@ -2,7 +2,7 @@ import React, { useReducer, createContext } from 'react';
 import {words} from './words';
 
 const initialState = {
-    words : ['test', 'test5461', 'sdksnfvfv', 'qdfv,dqf'],
+    words : [],
     equipes : [
         {
             id: 'equipe1',
@@ -74,7 +74,11 @@ const StateProvider = ({children}) => {
         const {type, payload} = action;
         const {currentPlayer, currentManche, equipes, manches} = state;
 
+        console.log(state);
         switch(type) {
+            case 'RESTART_GAME' :
+                return initialState;
+
             case 'ADD_TEAMS_NAME' :
                 return {
                     ...state,
@@ -82,7 +86,6 @@ const StateProvider = ({children}) => {
                 };
             case 'ADD_WORDS' :
                 const wordsList = chooseWords(words, 20);
-                
                 const wordsListToManche = state.manches.map( el => ({...el, wordsTofinds : wordsList}));
                 
                 return {
@@ -157,7 +160,6 @@ const StateProvider = ({children}) => {
                     currentManche: changeManche
                 }
             default:
-                console.log('default');
                 return state;
         }
 

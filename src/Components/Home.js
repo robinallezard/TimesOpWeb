@@ -53,11 +53,11 @@ function Home() {
             <legend className="text-lg mb-5">Tout d'abord, choisissez le nom des équipes qui vont s'affronter :</legend>
             <label className="flex flex-col w-full items-start mb-4" htmlFor="equipe1">
                 <span className="mb-4">Équipe 1 :</span>
-                <input className="shadow-sm w-full h-12 box-border p-4 rounded-lg" onChange={() => handleChange(event)} type="text" name="equipe1" id="equipe1"/>
+                <input className="shadow-sm w-full h-12 box-border p-4 rounded-lg" onChange={() => handleChange(event)} type="text" name="equipe1" id="equipe1" required/>
             </label>
             <label className="flex flex-col w-full items-start" htmlFor="equipe2">
                 <span className="mb-4">Équipe 2 :</span>
-                <input className="shadow-sm w-full h-12 box-border p-4 rounded-lg" onChange={() => handleChange(event)} type="text" name="equipe2" id="equipe2"/>
+                <input className="shadow-sm w-full h-12 box-border p-4 rounded-lg" onChange={() => handleChange(event)} type="text" name="equipe2" id="equipe2" required/>
             </label>
             {error ? (
             <div className="bg-red-500 p-4 text-white rounded-lg box-border w-full mt-4">
