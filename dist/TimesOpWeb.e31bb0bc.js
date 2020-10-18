@@ -32888,7 +32888,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function App() {
   return /*#__PURE__*/_react.default.createElement(_store.StateProvider, null, /*#__PURE__*/_react.default.createElement("div", {
     className: "min-h-screen bg-gray-300 text-gray-900 font-sans flex justify-center items-center flex-col p-5 border-box"
-  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Switch, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.BrowserRouter, {
+    basename: undefined
+  }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Switch, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
     path: "/jeu"
   }, /*#__PURE__*/_react.default.createElement(_Jeu.default, null)), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
     path: "/recap"
@@ -32941,7 +32943,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60139" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60199" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
